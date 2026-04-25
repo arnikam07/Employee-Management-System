@@ -1,22 +1,26 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven'
+    }
+
     stages {
         stage('Build') {
             steps {
-                bat 'mvnw.cmd clean compile'
+                bat 'mvn clean compile'
             }
         }
 
         stage('Test') {
             steps {
-                bat 'mvnw.cmd test'
+                bat 'mvn test'
             }
         }
 
         stage('Package') {
             steps {
-                bat 'mvnw.cmd package'
+                bat 'mvn package'
             }
         }
     }
