@@ -22,4 +22,18 @@ public class EmployeeService {
     public List<Employee> getAllEmployees() {
         return repo.findAll();
     }
+
+    public Employee updateEmployee(Long id, Employee updated) {
+    Employee emp = repo.findById(id).orElseThrow();
+
+    emp.setName(updated.getName());
+    emp.setDepartment(updated.getDepartment());
+    emp.setSalary(updated.getSalary());
+
+    return repo.save(emp);
+}
+
+    public void deleteEmployee(Long id) {
+        repo.deleteById(id);
+    }
 }
