@@ -1,36 +1,37 @@
-package com.example.ems.controller;
+package com.example.ems.controller; // ← matches controller folder
 
 import com.example.ems.model.Employee;
 import com.example.ems.service.EmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("/api/employees")
+@RequiredArgsConstructor
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService service;
-
-    @PostMapping
-    public Employee addEmployee(@RequestBody Employee emp) {
-        return service.addEmployee(emp);
-    }
+    private final EmployeeService employeeService;
 
     @GetMapping
-    public List<Employee> getAll() {
-        return service.getAllEmployees();
+    public ResponseEntity<List<Employee>> getAll() {
+        return ResponseEntity.ok(employeeService.getAll());
     }
 
-    @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee emp) {
-    return service.updateEmployee(id, emp);
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.getById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<Employee> create(@RequestBody Employee employee) {
+        return ResponseEntity.ok(employeeService.save(employee));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEmployee(@PathVariable Long id) {
-        service.deleteEmployee(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        employeeService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

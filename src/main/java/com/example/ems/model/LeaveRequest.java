@@ -1,28 +1,39 @@
 package com.example.ems.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Table(name = "leave_requests")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class LeaveRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long employeeId;
-    private String reason;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;      // links to Saumya's Employee
 
-    private String status; // PENDING, APPROVED, REJECTED
+    @Column(nullable = false)
+    private int numberOfDays;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getEmployeeId() { return employeeId; }
-    public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }
-
-    public String getReason() { return reason; }
-    public void setReason(String reason) { this.reason = reason; }
-
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    @Enumerated(EnumType.STRING)
+    private LeaveStatus status;
 }

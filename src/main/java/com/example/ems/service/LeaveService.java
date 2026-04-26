@@ -1,41 +1,21 @@
 package com.example.ems.service;
 
-import com.example.ems.model.LeaveRequest;
-import com.example.ems.repository.LeaveRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
-public class LeaveService {
+import com.example.ems.model.LeaveRequest;
+import com.example.ems.model.LeaveStatus;
 
-    private final LeaveRepository repo;
+public interface LeaveService {
 
-    public LeaveService(LeaveRepository repo) {
-        this.repo = repo;
-    }
+    LeaveRequest applyLeave(Long empId, int days);
 
-    // Employee applies leave
-    public LeaveRequest applyLeave(LeaveRequest leave) {
-        leave.setStatus("PENDING");
-        return repo.save(leave);
-    }
+    void approveLeave(Long leaveId);
 
-    // Admin approves leave
-    public LeaveRequest approveLeave(Long id) {
-        LeaveRequest leave = repo.findById(id).orElseThrow();
-        leave.setStatus("APPROVED");
-        return repo.save(leave);
-    }
+    void rejectLeave(Long leaveId);
 
-    // Admin rejects leave
-    public LeaveRequest rejectLeave(Long id) {
-        LeaveRequest leave = repo.findById(id).orElseThrow();
-        leave.setStatus("REJECTED");
-        return repo.save(leave);
-    }
+    int getLeaveBalance(Long empId);
 
-    public List<LeaveRequest> getAllLeaves() {
-        return repo.findAll();
-    }
+    LeaveStatus getLeaveStatus(Long leaveId);
+
+    List<LeaveRequest> getAllLeaves();
 }
